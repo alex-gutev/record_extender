@@ -74,7 +74,7 @@ class RecordExtension {
 ///
 /// * `{type-params}`
 ///
-///   Substitude with the comma-separated List of the generated extension type
+///   Substituted with the comma-separated List of the generated extension type
 ///   parameters, e.g. 'T$1, T$2, T$3'.
 ///
 /// The following elements are supported:
