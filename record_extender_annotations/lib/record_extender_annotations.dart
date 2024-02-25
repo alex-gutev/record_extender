@@ -37,9 +37,16 @@ class RecordExtension {
   /// Number of record extensions to generate
   final int size;
 
+  /// Documentation comment to insert if not null.
+  final String? documentation;
+
   /// Specifies that [size] record extensions should be generated using the annotated element as a template.
+  ///
+  /// If [documentation] is the non-null it is insert above every generated
+  /// element as a documentation comment.
   const RecordExtension({
-    required this.size
+    required this.size,
+    this.documentation
   });
 }
 
@@ -77,14 +84,21 @@ class RecordExtensionElement {
   /// The return type and implementation code of this element
   final String type, implementation;
 
+  /// Documentation comment to insert if not null.
+  final String? documentation;
+
   /// Specify that the annotated element should be included in a generated record extension.
   ///
   /// [type] is the code defining the return type of the generated element.
   ///
   /// [implementation] is the code defining the implementation of the
   /// generated element.
+  ///
+  /// [documentation] is the documentation comment to insert above the generated
+  /// element, if non-null.
   const RecordExtensionElement({
     required this.type,
-    required this.implementation
+    required this.implementation,
+    this.documentation
   });
 }
