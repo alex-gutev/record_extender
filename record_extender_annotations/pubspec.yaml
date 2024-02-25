@@ -1,5 +1,6 @@
 name: record_extender_annotations
 description: "Annotations for record_extender source generator"
+repository: https://github.com/alex-gutev/record_extender/tree/master/record_extender_annotations
 version: 0.1.0
 
 environment:
