@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build/src/builder/build_step.dart';
@@ -19,6 +22,7 @@ class RecordExtensionGenerator extends GeneratorForAnnotation<RecordExtension> {
     }
 
     final size = annotation.read('size').intValue;
+    final doc = annotation.read('documentation');
 
     final visitor = ExtensionVisitor();
     element.visitChildren(visitor);
@@ -31,7 +35,8 @@ class RecordExtensionGenerator extends GeneratorForAnnotation<RecordExtension> {
         typeParams: element.typeParameters,
         extendedType: element.extendedType,
         size: i,
-        elements: visitor.elements
+        elements: visitor.elements,
+        documentation: doc.isString ? doc.stringValue : null
       ));
     }
 
@@ -44,7 +49,8 @@ class RecordExtensionGenerator extends GeneratorForAnnotation<RecordExtension> {
     required List<TypeParameterElement> typeParams,
     required DartType extendedType,
     required int size,
-    required List<ElementSpec> elements
+    required List<ElementSpec> elements,
+    required String? documentation
   }) {
     final recordTypeParams = _recordTypeParams(elements: typeParams, size: size)
         .join(',');
@@ -56,6 +62,10 @@ class RecordExtensionGenerator extends GeneratorForAnnotation<RecordExtension> {
         .join(',');
 
     final buffer = StringBuffer();
+
+    if (documentation != null) {
+      buffer.writeln(_makeDocComment(documentation));
+    }
 
     buffer.write('extension $baseName$size<$recordTypeParams> on ($recordType) {');
 
@@ -93,6 +103,11 @@ class RecordExtensionGenerator extends GeneratorForAnnotation<RecordExtension> {
     );
 
     final buffer = StringBuffer();
+
+    if (spec.documentation != null) {
+      buffer.writeln(_makeDocComment(spec.documentation!));
+    }
+
     buffer.writeln('$returnType get ${element.name} {');
 
     buffer.writeln(_replacePlaceholders(
@@ -142,5 +157,18 @@ class RecordExtensionGenerator extends GeneratorForAnnotation<RecordExtension> {
     return str.replaceAll('\{types\}', recordType)
         .replaceAll('\{elements\}', recordElements)
         .replaceAll('\{type-params\}', recordTypeParams);
+  }
+
+  /// Convert a multi-line string into a documentation comment
+  String _makeDocComment(String documentation) {
+    final splitter = LineSplitter();
+    final lines = splitter.convert(documentation);
+
+    if (lines.lastOrNull?.isEmpty ?? false) {
+      lines.removeLast();
+    }
+
+    return lines.map((e) => '/// $e')
+        .join(Platform.lineTerminator);
   }
 }

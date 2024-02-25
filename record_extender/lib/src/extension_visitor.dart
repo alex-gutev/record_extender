@@ -52,15 +52,20 @@ class ElementSpec {
   /// Code defining the implementation
   final String implementation;
 
+  /// Documentation comment to insert if any
+  final String? documentation;
+
   ElementSpec({
     required this.element,
     required this.returnType,
-    required this.implementation
+    required this.implementation,
+    required this.documentation,
   });
 
   factory ElementSpec.parse(Element element, DartObject object) => ElementSpec(
       element: element,
       returnType: object.getField('type')!.toStringValue()!,
-      implementation: object.getField('implementation')!.toStringValue()!
+      implementation: object.getField('implementation')!.toStringValue()!,
+      documentation: object.getField('documentation')?.toStringValue()
   );
 }
