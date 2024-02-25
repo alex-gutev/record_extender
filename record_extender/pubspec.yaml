@@ -1,5 +1,6 @@
 name: record_extender
 description: "Generates record extensions for multiple record sizes."
+repository: https://github.com/alex-gutev/record_extender/tree/master/record_extender
 version: 0.1.0
 
 environment:
