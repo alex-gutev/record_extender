@@ -1,6 +1,6 @@
 name: record_extender_annotations
 description: "Annotations for record_extender source generator"
-version: 0.0.1
+version: 0.1.0
 
 environment:
   sdk: '>=2.18.6 <4.0.0'
